@@ -46,7 +46,7 @@ public class AutyhorizeController {
         String accessToken = gitHubProvider.getAccessToken(accessTokenDTO);
         GithubUSer githubUSer = gitHubProvider.getUser(accessToken);
         System.out.println("user = " + githubUSer);
-        if (githubUSer!=null){
+        if (githubUSer!=null&&githubUSer.getId()!=null){
             User user = new User();
             user.setName(githubUSer.getName());
             user.setAccountId(String.valueOf(githubUSer.getId()));
@@ -54,6 +54,7 @@ public class AutyhorizeController {
             user.setToken(token);
             user.setGmmtCreate(System.currentTimeMillis());
             user.setGmtModified(user.getGmtModified());
+            user.setAvatarUrl(githubUSer.getAvatar_url());
             userMapper.insert(user);
             //登录成功，token写到cookie
             response.addCookie(new Cookie("token",token));
