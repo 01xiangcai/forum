@@ -46,14 +46,15 @@ public class AutyhorizeController {
         String accessToken = gitHubProvider.getAccessToken(accessTokenDTO);
         GithubUSer githubUSer = gitHubProvider.getUser(accessToken);
         System.out.println("user = " + githubUSer);
+
         if (githubUSer!=null&&githubUSer.getId()!=null){
             User user = new User();
             user.setName(githubUSer.getName());
             user.setAccountId(String.valueOf(githubUSer.getId()));
             String token = UUID.randomUUID().toString();
             user.setToken(token);
-            user.setGmmtCreate(System.currentTimeMillis());
-            user.setGmtModified(user.getGmtModified());
+            user.setGmtCreate(System.currentTimeMillis());
+            user.setGmtModified(user.getGmtCreate());
             user.setAvatarUrl(githubUSer.getAvatar_url());
             userMapper.insert(user);
             //登录成功，token写到cookie
