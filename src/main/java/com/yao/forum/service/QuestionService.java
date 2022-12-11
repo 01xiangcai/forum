@@ -1,5 +1,6 @@
 package com.yao.forum.service;
 
+import com.yao.forum.dto.PaginationDTO;
 import com.yao.forum.dto.QuestionDTO;
 import com.yao.forum.mapper.QuestionMapper;
 import com.yao.forum.mapper.UserMapper;
@@ -20,18 +21,35 @@ public class QuestionService {
     @Autowired
     private QuestionMapper questionMapper;
 
-    public List<QuestionDTO> list() {
+    public PaginationDTO list(Integer page, Integer size) {
+        PaginationDTO paginationDTO = new PaginationDTO();
+        Integer totalCount = questionMapper.count();
+        paginationDTO.setPagination(totalCount, page, size);
 
-        List<Question> questionList = questionMapper.list();
+        //判断传进来页码是否超过实际页码,页码越界的问题
+        if (page < 1) {
+            page = 1;
+        }
+        if (page > paginationDTO.getTotalPage()) {
+            page = paginationDTO.getTotalPage();
+        }
+
+        //size*(page-1) ，offset从第几条数据开始，size为5，第一页数据展示为0-4，第二页为5-9，第三页为10-14。
+        Integer offset = size * (page - 1);
+
+        List<Question> questions = questionMapper.list(offset, size);
         List<QuestionDTO> questionDTOList = new ArrayList<>();
 
-        for (Question question : questionList) {
+
+        for (Question question : questions) {
             User user = userMapper.finfById(question.getCreator());
             QuestionDTO questionDTO = new QuestionDTO();
-            BeanUtils.copyProperties(question,questionDTO);
+            BeanUtils.copyProperties(question, questionDTO);
             questionDTO.setUser(user);
             questionDTOList.add(questionDTO);
         }
-        return questionDTOList;
+        paginationDTO.setQuestions(questionDTOList);
+
+        return paginationDTO;
     }
 }
