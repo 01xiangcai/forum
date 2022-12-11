@@ -40,14 +40,18 @@ public class QuestionService {
         List<Question> questions = questionMapper.list(offset, size);
         List<QuestionDTO> questionDTOList = new ArrayList<>();
 
-
         for (Question question : questions) {
+            //根据id找到用户（问题的发布者）
             User user = userMapper.finfById(question.getCreator());
             QuestionDTO questionDTO = new QuestionDTO();
+            //将查出来的数据question类型转换为questionDTO
             BeanUtils.copyProperties(question, questionDTO);
+            //将用户放到questionDTO中
             questionDTO.setUser(user);
+            //放到结果集
             questionDTOList.add(questionDTO);
         }
+        //循环结果集放到最终的paginationDTO的List<QuestionDTO> questions属性中。
         paginationDTO.setQuestions(questionDTOList);
 
         return paginationDTO;
