@@ -56,8 +56,6 @@ public class AutyhorizeController {
             user.setAccountId(String.valueOf(githubUSer.getId()));
             String token = UUID.randomUUID().toString();
             user.setToken(token);
-            user.setGmtCreate(System.currentTimeMillis());
-            user.setGmtModified(user.getGmtCreate());
             user.setAvatarUrl(githubUSer.getAvatarUrl());
             //判断用户是否在数据库中存在,存在就更新，不存在直接插入
             userService.creatOrUpdate(user);
