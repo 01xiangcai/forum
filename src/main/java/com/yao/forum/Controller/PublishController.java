@@ -50,20 +50,7 @@ public class PublishController {
             return "publish";
         }
 
-        //获取用户
-        User user = null;
-        Cookie[] cookies = request.getCookies();
-        if (cookies!=null&&cookies.length!=0)
-        for (Cookie cookie : cookies) {
-            if (cookie.getName().equals("token")){
-                String token = cookie.getValue();
-                user = userMapper.finfByToken(token);
-                if (user != null) {
-                    request.getSession().setAttribute("user",user);
-                }
-                break;
-            }
-        }
+        User user =(User) request.getSession().getAttribute("user");
 
         //用户为空
         if (user==null){

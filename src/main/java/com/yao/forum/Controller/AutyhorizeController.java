@@ -5,6 +5,7 @@ import com.yao.forum.dto.GithubUSer;
 import com.yao.forum.mapper.UserMapper;
 import com.yao.forum.model.User;
 import com.yao.forum.provider.GitHubProvider;
+import com.yao.forum.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -21,7 +22,9 @@ public class AutyhorizeController {
     @Autowired
     private GitHubProvider gitHubProvider;
     @Autowired
-    private UserMapper userMapper;
+    UserService userService;
+    @Autowired
+    UserMapper userMapper;
 
     @Value("${github.client.id}")
     private String clientId;
@@ -56,7 +59,9 @@ public class AutyhorizeController {
             user.setGmtCreate(System.currentTimeMillis());
             user.setGmtModified(user.getGmtCreate());
             user.setAvatarUrl(githubUSer.getAvatarUrl());
-            userMapper.insert(user);
+            //判断用户是否在数据库中存在,存在就更新，不存在直接插入
+            userService.creatOrUpdate(user);
+//            userMapper.insert(user);
             //登录成功，token写到cookie
             response.addCookie(new Cookie("token",token));
             return "redirect:/";
@@ -65,4 +70,17 @@ public class AutyhorizeController {
             return "redirect:/";
         }
     }
+
+    //退出登录
+    @GetMapping("/logout")
+    public String logout(HttpServletRequest request,
+                         HttpServletResponse response){
+        request.getSession().removeAttribute("user");
+        Cookie cookie = new Cookie("token",null);
+        cookie.setMaxAge(0);
+        response.addCookie(cookie);
+        return "redirect:/";
+
+    }
+
 }

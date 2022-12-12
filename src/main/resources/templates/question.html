@@ -1,0 +1,59 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="${question.title}"></title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="/css/forum.css">
+    <script src="/jquery-3.6.1.slim.min.js"></script>
+    <script src="/js/bootstrap.min.js" type="application/javascript"></script>
+
+
+</head>
+<body>
+<div th:insert="~{navigation :: navigation}"></div>
+<div class="container-fluid main profile">
+    <div class="row">
+        <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
+            <h3><span th:text="${question.title}"></span></h3>
+            <span class="text-desc">
+                        作者：<span th:text="${question.user.name}"></span>|
+                        浏览数<span th:text="${question.viewCount}"></span> |
+                       发布时间：<span th:text="${#dates.format(question.gmtCreate,'yyyy-MM-dd HH:mm')}"></span>
+            </span>
+            <hr>
+            问题描述：<br>
+            <span th:text="${question.description}"></span>
+            <hr>
+            <a th:if="${question.user!=null&&session.user.id==question.creator}">
+                <span class="glyphicon glyphicon-pencil" aria-hidden="true">
+                </span> 编辑</a>
+
+        </div>
+        <hr>
+
+
+        <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+
+                <h3> 发起人</h3>
+                <a href="#">
+                    <img class="media-object img-circle" th:src="${question.user.avatarUrl}">
+                </a>
+                <span th:text="${question.user.name}"></span>|
+                <span class="text-desc">
+                        浏览数<span th:text="${question.viewCount}"></span> |
+                       发布时间：<span th:text="${#dates.format(question.gmtCreate,'yyyy-MM-dd')}"></span>
+                 </span>
+            </div>
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <h3> 相关问题</h3>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+</body>
+</html>
