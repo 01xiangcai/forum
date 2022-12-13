@@ -2,11 +2,14 @@ package com.yao.forum.service;
 
 import com.yao.forum.dto.PaginationDTO;
 import com.yao.forum.dto.QuestionDTO;
+import com.yao.forum.exception.CustomizeErrorCode;
+import com.yao.forum.exception.CustomizeException;
 import com.yao.forum.mapper.QuestionMapper;
 import com.yao.forum.mapper.UserMapper;
 import com.yao.forum.model.Question;
 import com.yao.forum.model.QuestionExample;
 import com.yao.forum.model.User;
+import net.bytebuddy.implementation.bytecode.Throw;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -122,6 +125,9 @@ public class QuestionService {
 
     public QuestionDTO getQuestionById(Integer id) {
         Question question = questionMapper.selectByPrimaryKey(id);
+        if (question==null){
+            throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
+        }
         QuestionDTO questionDTO = new QuestionDTO();
         //将查出来的数据question类型转换为questionDTO
         BeanUtils.copyProperties(question, questionDTO);
@@ -145,7 +151,10 @@ public class QuestionService {
             updateQuestion.setGmtModified(System.currentTimeMillis());
             QuestionExample questionExample = new QuestionExample();
             questionExample.createCriteria().andIdEqualTo(question.getId());
-            questionMapper.updateByExampleSelective(updateQuestion,questionExample);
+            int updated = questionMapper.updateByExampleSelective(updateQuestion, questionExample);
+            if (updated!=1){
+                throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
+            }
         }
     }
 }
