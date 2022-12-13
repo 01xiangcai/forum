@@ -22,7 +22,7 @@ import javax.servlet.http.HttpServletRequest;
 public class PublishController {
     @Resource
     UserMapper userMapper;
-    @Autowired
+    @Resource
     QuestionMapper questionMapper;
     @Autowired
     QuestionService questionService;

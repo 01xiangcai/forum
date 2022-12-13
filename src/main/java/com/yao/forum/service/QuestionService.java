@@ -5,7 +5,9 @@ import com.yao.forum.dto.QuestionDTO;
 import com.yao.forum.mapper.QuestionMapper;
 import com.yao.forum.mapper.UserMapper;
 import com.yao.forum.model.Question;
+import com.yao.forum.model.QuestionExample;
 import com.yao.forum.model.User;
+import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,26 +21,35 @@ import java.util.List;
 public class QuestionService {
     @Resource
     private UserMapper userMapper;
-    @Autowired
+    @Resource
     private QuestionMapper questionMapper;
 
     public PaginationDTO list(Integer page, Integer size) {
+        Integer totalPage;
+
         PaginationDTO paginationDTO = new PaginationDTO();
-        Integer totalCount = questionMapper.count();
-        paginationDTO.setPagination(totalCount, page, size);
+        Integer totalCount = (int)questionMapper.countByExample(new QuestionExample());
+
+
+        //总页数展示，例如，总数据totalCount为12，size为5，12取模（%）5为2，不为0，需要三页来展示，为12/5再加上1，若是10%5则为0，两页。
+        if (totalCount % size != 0) {
+            totalPage = totalCount / size + 1;
+        } else {
+            totalPage = totalCount / size;
+        }
 
         //判断传进来页码是否超过实际页码,页码越界的问题
         if (page < 1) {
             page = 1;
         }
-        if (page > paginationDTO.getTotalPage()) {
-            page = paginationDTO.getTotalPage();
+        if (page > totalPage) {
+            page = totalPage;
         }
-
+        paginationDTO.setPagination(totalPage, page, size);
         //size*(page-1) ，offset从第几条数据开始，size为5，第一页数据展示为0-4，第二页为5-9，第三页为10-14。
         Integer offset = size < 0 ? 0 : size * (page - 1);
-
-        List<Question> questions = questionMapper.list(offset, size);
+//        List<Question> questions = questionMapper.selectByExampleWithRowbounds(new QuestionExample(), new RowBounds(offset, size));
+        List<Question> questions = questionMapper.selectByExampleWithBLOBsWithRowbounds(new QuestionExample(), new RowBounds(offset, size));
         List<QuestionDTO> questionDTOList = new ArrayList<>();
 
         for (Question question : questions) {
@@ -60,21 +71,35 @@ public class QuestionService {
 
     public PaginationDTO list(Integer userId, Integer page, Integer size) {
         PaginationDTO paginationDTO = new PaginationDTO();
-        Integer totalCount = questionMapper.countByUserId(userId);
-        paginationDTO.setPagination(totalCount, page, size);
+        Integer totalPage;
+
+        QuestionExample questionExample = new QuestionExample();
+        questionExample.createCriteria().andCreatorEqualTo(userId);
+        Integer totalCount = (int)questionMapper.countByExample(new QuestionExample());
+
+
+        //总页数展示，例如，总数据totalCount为12，size为5，12取模（%）5为2，不为0，需要三页来展示，为12/5再加上1，若是10%5则为0，两页。
+        if (totalCount % size != 0) {
+            totalPage = totalCount / size + 1;
+        } else {
+            totalPage = totalCount / size;
+        }
 
         //判断传进来页码是否超过实际页码,页码越界的问题
         if (page < 1) {
             page = 1;
         }
-        if (page > paginationDTO.getTotalPage()) {
-            page = paginationDTO.getTotalPage();
+        if (page > totalPage) {
+            page = totalPage;
         }
+        paginationDTO.setPagination(totalPage, page, size);
 
         //size*(page-1) ，offset从第几条数据开始，size为5，第一页数据展示为0-4，第二页为5-9，第三页为10-14。
         Integer offset = size < 0 ? 0 : size * (page - 1);
-
-        List<Question> questions = questionMapper.listByUserId(userId, offset, size);
+        QuestionExample questionExample1 = new QuestionExample();
+        questionExample1.createCriteria().andCreatorEqualTo(userId);
+        List<Question> questions = questionMapper.selectByExampleWithBLOBsWithRowbounds(questionExample1,new RowBounds(offset,size));
+//        List<Question> questions = questionMapper.selectByExampleWithRowbounds(questionExample1,new RowBounds(offset,size));
         List<QuestionDTO> questionDTOList = new ArrayList<>();
 
         for (Question question : questions) {
@@ -96,7 +121,7 @@ public class QuestionService {
 
 
     public QuestionDTO getQuestionById(Integer id) {
-        Question question = questionMapper.getQuestionById(id);
+        Question question = questionMapper.selectByPrimaryKey(id);
         QuestionDTO questionDTO = new QuestionDTO();
         //将查出来的数据question类型转换为questionDTO
         BeanUtils.copyProperties(question, questionDTO);
@@ -110,11 +135,17 @@ public class QuestionService {
             //创建
             question.setGmtCreate(System.currentTimeMillis());
             question.setGmtModified(question.getGmtCreate());
-            questionMapper.create(question);
+            questionMapper.insert(question);
         }else {
             //更新
-            question.setGmtModified(question.getGmtCreate());
-            questionMapper.update(question);
+            Question updateQuestion = new Question();
+            updateQuestion.setTitle(question.getTitle());
+            updateQuestion.setDescription(question.getDescription());
+            updateQuestion.setTag(question.getTag());
+            updateQuestion.setGmtModified(System.currentTimeMillis());
+            QuestionExample questionExample = new QuestionExample();
+            questionExample.createCriteria().andIdEqualTo(question.getId());
+            questionMapper.updateByExampleSelective(updateQuestion,questionExample);
         }
     }
 }

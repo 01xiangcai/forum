@@ -18,23 +18,10 @@ public class PaginationDTO {
     private Integer totalPage;
 
 
-    public void setPagination(Integer totalCount, Integer page, Integer size) {
+    public void setPagination(Integer totalPage, Integer page, Integer size) {
 
 
-        //总页数展示，例如，总数据totalCount为12，size为5，12取模（%）5为2，不为0，需要三页来展示，为12/5再加上1，若是10%5则为0，两页。
-        if (totalCount % size != 0) {
-            totalPage = totalCount / size + 1;
-        } else {
-            totalPage = totalCount / size;
-        }
-
-       //判断传进来页码是否超过实际页码,页码越界的问题
-        if (page < 1) {
-            page = 1;
-        }
-        if (page > totalPage) {
-            page = totalPage;
-        }
+        this.totalPage=totalPage;
         //不加this这句传不进参数
         this.page = page;
 

@@ -7,7 +7,7 @@
 
 
     <context id="DB2Tables" targetRuntime="MyBatis3">
-        <plugin type="org.mybatis.generator.plugins.SerializablePlugin" />
+        <plugin type="org.mybatis.generator.plugins.RowBoundsPlugin" />
         <jdbcConnection driverClass="com.mysql.jdbc.Driver"
                         connectionURL="jdbc:mysql://192.168.230.201:3306/forum"
                         userId="root"
@@ -32,7 +32,9 @@
         </javaClientGenerator>
 
         <table  tableName="user" domainObjectName="User" >
+        </table>
 
+        <table  tableName="question" domainObjectName="Question" >
         </table>
 
     </context>
