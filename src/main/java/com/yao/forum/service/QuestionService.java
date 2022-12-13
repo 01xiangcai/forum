@@ -10,13 +10,14 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 
 
 @Service
 public class QuestionService {
-    @Autowired
+    @Resource
     private UserMapper userMapper;
     @Autowired
     private QuestionMapper questionMapper;
@@ -42,7 +43,7 @@ public class QuestionService {
 
         for (Question question : questions) {
             //根据id找到用户（问题的发布者）
-            User user = userMapper.finfById(question.getCreator());
+            User user = userMapper.selectByPrimaryKey(question.getCreator());
             QuestionDTO questionDTO = new QuestionDTO();
             //将查出来的数据question类型转换为questionDTO
             BeanUtils.copyProperties(question, questionDTO);
@@ -78,7 +79,7 @@ public class QuestionService {
 
         for (Question question : questions) {
             //根据id找到用户（问题的发布者）
-            User user = userMapper.finfById(question.getCreator());
+            User user = userMapper.selectByPrimaryKey(question.getCreator());
             QuestionDTO questionDTO = new QuestionDTO();
             //将查出来的数据question类型转换为questionDTO
             BeanUtils.copyProperties(question, questionDTO);
@@ -99,7 +100,7 @@ public class QuestionService {
         QuestionDTO questionDTO = new QuestionDTO();
         //将查出来的数据question类型转换为questionDTO
         BeanUtils.copyProperties(question, questionDTO);
-        User user = userMapper.finfById(question.getCreator());
+        User user = userMapper.selectByPrimaryKey(question.getCreator());
         questionDTO.setUser(user);
         return questionDTO;
     }
