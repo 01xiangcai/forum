@@ -4,6 +4,7 @@ import com.yao.forum.dto.PaginationDTO;
 import com.yao.forum.dto.QuestionDTO;
 import com.yao.forum.exception.CustomizeErrorCode;
 import com.yao.forum.exception.CustomizeException;
+import com.yao.forum.mapper.QuestionExtMapper;
 import com.yao.forum.mapper.QuestionMapper;
 import com.yao.forum.mapper.UserMapper;
 import com.yao.forum.model.Question;
@@ -26,6 +27,8 @@ public class QuestionService {
     private UserMapper userMapper;
     @Resource
     private QuestionMapper questionMapper;
+    @Resource
+    private QuestionExtMapper questionExtMapper;
 
     public PaginationDTO list(Integer page, Integer size) {
         Integer totalPage;
@@ -156,5 +159,12 @@ public class QuestionService {
                 throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
             }
         }
+    }
+
+    public void incView(Integer id) {
+        Question question = new Question();
+        question.setId(id);
+        question.setViewCount(1);
+        questionExtMapper.incView(question);
     }
 }
