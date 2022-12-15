@@ -32,7 +32,9 @@ public class QuestionService {
         Integer totalPage;
 
         PaginationDTO paginationDTO = new PaginationDTO();
-        Integer totalCount = (int)questionMapper.countByExample(new QuestionExample());
+        QuestionExample questionExample = new QuestionExample();
+
+        Integer totalCount = (int)questionMapper.countByExample(questionExample);
 
 
         //总页数展示，例如，总数据totalCount为12，size为5，12取模（%）5为2，不为0，需要三页来展示，为12/5再加上1，若是10%5则为0，两页。
@@ -53,7 +55,8 @@ public class QuestionService {
         //size*(page-1) ，offset从第几条数据开始，size为5，第一页数据展示为0-4，第二页为5-9，第三页为10-14。
         Integer offset = size < 0 ? 0 : size * (page - 1);
 //        List<Question> questions = questionMapper.selectByExampleWithRowbounds(new QuestionExample(), new RowBounds(offset, size));
-        List<Question> questions = questionMapper.selectByExampleWithBLOBsWithRowbounds(new QuestionExample(), new RowBounds(offset, size));
+        questionExample.setOrderByClause("gmt_create desc");
+        List<Question> questions = questionMapper.selectByExampleWithBLOBsWithRowbounds(questionExample, new RowBounds(offset, size));
         List<QuestionDTO> questionDTOList = new ArrayList<>();
 
         for (Question question : questions) {
@@ -79,7 +82,8 @@ public class QuestionService {
 
         QuestionExample questionExample = new QuestionExample();
         questionExample.createCriteria().andCreatorEqualTo(userId);
-        Integer totalCount = (int)questionMapper.countByExample(new QuestionExample());
+
+        Integer totalCount = (int)questionMapper.countByExample(questionExample);
 
 
         //总页数展示，例如，总数据totalCount为12，size为5，12取模（%）5为2，不为0，需要三页来展示，为12/5再加上1，若是10%5则为0，两页。
@@ -102,6 +106,7 @@ public class QuestionService {
         Integer offset = size < 0 ? 0 : size * (page - 1);
         QuestionExample questionExample1 = new QuestionExample();
         questionExample1.createCriteria().andCreatorEqualTo(userId);
+        questionExample1.setOrderByClause("gmt_create desc");
         List<Question> questions = questionMapper.selectByExampleWithBLOBsWithRowbounds(questionExample1,new RowBounds(offset,size));
 //        List<Question> questions = questionMapper.selectByExampleWithRowbounds(questionExample1,new RowBounds(offset,size));
         List<QuestionDTO> questionDTOList = new ArrayList<>();
