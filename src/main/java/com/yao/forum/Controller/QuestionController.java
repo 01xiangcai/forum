@@ -1,8 +1,8 @@
 package com.yao.forum.Controller;
 
-import com.yao.forum.dto.CommentCreateDTO;
 import com.yao.forum.dto.CommentDTO;
 import com.yao.forum.dto.QuestionDTO;
+import com.yao.forum.enums.CommentTypeEnum;
 import com.yao.forum.exception.CustomizeErrorCode;
 import com.yao.forum.exception.CustomizeException;
 import com.yao.forum.model.User;
@@ -34,7 +34,7 @@ public class QuestionController {
             throw  new CustomizeException(CustomizeErrorCode.NO_LOGIN);
         }
         QuestionDTO questionDTO=questionService.getQuestionById(id);
-        List<CommentDTO> commentDTOS = commentService.listByQuestionId(id);
+        List<CommentDTO> commentDTOS = commentService.listByTargetId(id, CommentTypeEnum.QUESTION);
         //增加阅读数
         questionService.incView(id);
         model.addAttribute("question",questionDTO);
