@@ -46,7 +46,7 @@
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <span class="label label-info question-tag" th:each="tags:${question.tag.split(',|，')}">
                         <span class="glyphicon glyphicon-tags"></span>
-                        <span class= "label label-info" th:text="${tags}"></span>
+                        <span class="label label-info" th:text="${tags}"></span>
                     </span>
                 </div>
 
@@ -146,6 +146,14 @@
                        发布时间：<span th:text="${#dates.format(question.gmtCreate,'yyyy-MM-dd')}"></span>
                  </span>
             </div>
+            <hr class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
+
+            <!--图片-->
+            <div>
+                <img src="/img/lucy.png" class="question-img">
+            </div>
+
+            <hr class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <h3> 相关问题</h3>
                 <ul class="question-related">
@@ -154,6 +162,8 @@
                     </li>
                 </ul>
             </div>
+
+
         </div>
 
     </div>
