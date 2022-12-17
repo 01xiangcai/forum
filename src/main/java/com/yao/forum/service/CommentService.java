@@ -46,6 +46,7 @@ public class CommentService {
             comment.setCommentCount(0);
         }
 
+
         if (comment.getType() == CommentTypeEnum.COMMENT.getType()) {
             //回复评论
             Comment dbcomment = commentMapper.selectByPrimaryKey(comment.getParentId());
@@ -59,6 +60,7 @@ public class CommentService {
             parentComment.setId(comment.getParentId());
             parentComment.setCommentCount(1);
             commentExtMapper.incCommentCount(parentComment);
+
         } else {
             Question question = questionMapper.selectByPrimaryKey(comment.getParentId());
             //回复问题

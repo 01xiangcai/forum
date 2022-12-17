@@ -40,6 +40,13 @@ body {
     margin-bottom: 15px;
 }
 
+.community-tag:hover {
+    background-color: #339dff;
+    color: #fff !important;
+    text-decoration-line: none;
+}
+
+
 .community-tag {
     text-decoration-line: none;
     cursor: pointer;
@@ -70,6 +77,19 @@ body {
     width: 85%;
     margin-left: 17px;
 }
+
+.publish-tag-tab {
+    display: none;
+    margin-top: 10px;
+    padding-top: 10px;
+}
+
+.publish-tag-tab .label-info {
+    white-space: normal;
+    margin: 5px 5px;
+    display: inline-block;
+}
+
 
 
 .comment{
