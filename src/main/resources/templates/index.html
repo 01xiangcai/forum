@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="/css/bootstrap.min.css">
     <link rel="stylesheet" href="/css/bootstrap-theme.min.css">
     <link rel="stylesheet" href="/css/forum.css">
-    <script src="js/jquery-3.6.2.min.js"></script>
+    <script src="/js/jquery-3.6.2.min.js"></script>
     <script src="/js/bootstrap.min.js" type="application/javascript"></script>
 
 </head>
@@ -20,7 +20,7 @@
             <h2><span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>发现</h2>
             <hr>
 
-            <div class="media" th:each="question:${pagination.questions}">
+            <div class="media" th:each="question:${pagination.data}">
                 <div class="media-left">
                     <a href="#">
                         <img class="media-object img-circle" th:src="${question.user.avatarUrl}">

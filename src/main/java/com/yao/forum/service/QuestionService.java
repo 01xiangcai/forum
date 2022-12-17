@@ -13,7 +13,6 @@ import com.yao.forum.model.User;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.BeanUtils;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -21,7 +20,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 
 @Service
@@ -56,7 +54,7 @@ public class QuestionService {
         if (page > totalPage) {
             page = totalPage;
         }
-        paginationDTO.setPagination(totalPage, page, size);
+        paginationDTO.setPagination(totalPage, page);
         //size*(page-1) ，offset从第几条数据开始，size为5，第一页数据展示为0-4，第二页为5-9，第三页为10-14。
         Integer offset = size < 0 ? 0 : size * (page - 1);
 //        List<Question> questions = questionMapper.selectByExampleWithRowbounds(new QuestionExample(), new RowBounds(offset, size));
@@ -76,7 +74,7 @@ public class QuestionService {
             questionDTOList.add(questionDTO);
         }
         //循环结果集放到最终的paginationDTO的List<QuestionDTO> questions属性中。
-        paginationDTO.setQuestions(questionDTOList);
+        paginationDTO.setData(questionDTOList);
 
         return paginationDTO;
     }
@@ -105,7 +103,7 @@ public class QuestionService {
         if (page > totalPage) {
             page = totalPage;
         }
-        paginationDTO.setPagination(totalPage, page, size);
+        paginationDTO.setPagination(totalPage, page);
 
         //size*(page-1) ，offset从第几条数据开始，size为5，第一页数据展示为0-4，第二页为5-9，第三页为10-14。
         Integer offset = size < 0 ? 0 : size * (page - 1);
@@ -128,7 +126,7 @@ public class QuestionService {
             questionDTOList.add(questionDTO);
         }
         //循环结果集放到最终的paginationDTO的List<QuestionDTO> questions属性中。
-        paginationDTO.setQuestions(questionDTOList);
+        paginationDTO.setData(questionDTOList);
         return paginationDTO;
 
     }

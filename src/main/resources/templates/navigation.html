@@ -30,6 +30,9 @@
                       <li th:if="${session.user != null}">
                           <a href="/publish">发布问题</a>
                       </li>
+                      <li><a href="/profile/replies">通知 <span class="badge" th:text="${session.unreadCount}"></span></a>
+                        </li>
+
                       <li th:if="${session.user == null}"><a
                               href="https://github.com/login/oauth/authorize?client_id=12b7415968a1fbb1aecd&redirect_uri=http://localhost:8088/callback&scope=user&state=1">登录</a>
                       </li>
@@ -39,7 +42,7 @@
                               <span th:text="${session.user.getName()}"></span>
                               <span class="caret"></span>
                           </a>
-                          <ul class="dropdown-menu">
+                          <ul class="dropdown-menu" role="navigation">
                               <li><a href="/profile/questions">我的问题</a></li>
                               <li><a href="#">个人资料</a></li>
                               <li><a href="/logout">退出登录</a></li>
