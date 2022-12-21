@@ -16,6 +16,8 @@ public enum CustomizeErrorCode implements ICustomizeErrorCode {
     INVALID_OPERATION(2012, "兄弟，是不是走错房间了？"),
     USER_DISABLE(2013, "操作被禁用，如有疑问请联系管理员"),
     RATE_LIMIT(2014, "操作太快了，请稍后重试"),
+    NAME_REPEAT(2015, "名字已存在，要不换个试试"),
+    LOGIN_ERROR(2016, "名字或密码错误！"),
     ;
 
 

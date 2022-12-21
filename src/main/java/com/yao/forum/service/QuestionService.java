@@ -73,7 +73,7 @@ public class QuestionService {
         Integer offset = size < 0 ? 0 : size * (page - 1);
 //        List<Question> questions = questionMapper.selectByExampleWithRowbounds(new QuestionExample(), new RowBounds(offset, size));
         questionExample.setOrderByClause("gmt_create desc");
-        questionQueryDTO.setPage(page);
+        questionQueryDTO.setPage(offset);
         questionQueryDTO.setSize(size);
 //        List<Question> questions = questionMapper.selectByExampleWithBLOBsWithRowbounds(questionExample, new RowBounds(offset, size));
         List<Question> questions = questionExtMapper.selectBySearch(questionQueryDTO);
