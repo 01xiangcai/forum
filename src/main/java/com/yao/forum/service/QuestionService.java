@@ -52,6 +52,9 @@ public class QuestionService {
         QuestionQueryDTO questionQueryDTO = new QuestionQueryDTO();
         questionQueryDTO.setSearch(search);
         Integer totalCount = questionExtMapper.countBySearch(questionQueryDTO);
+        if (totalCount==0){
+            return null;
+        }
 
 
         //总页数展示，例如，总数据totalCount为12，size为5，12取模（%）5为2，不为0，需要三页来展示，为12/5再加上1，若是10%5则为0，两页。

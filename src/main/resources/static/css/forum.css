@@ -157,3 +157,10 @@ body {
 .red {
     color: red !important;
 }
+
+.search_error{
+width: 300px;
+margin-left: 92px;
+margin-bottom: -24px;
+margin-top: -14px;
+}
