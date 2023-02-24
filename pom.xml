@@ -13,6 +13,7 @@
     <artifactId>forum</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>forum</name>
+    <packaging>jar</packaging>
     <description>forum for me</description>
 
     <properties>
@@ -165,6 +166,19 @@
                         <version>5.1.47</version>
                     </dependency>
                 </dependencies>
+            </plugin>
+
+            <!--下面是将应用打包发布需要增加的插件-->
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
 
 
